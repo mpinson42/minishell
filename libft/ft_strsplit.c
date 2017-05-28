@@ -47,11 +47,25 @@ static int		ft_wlen(const char *s, char c)
 	return (len);
 }
 
+static int	ft_norme(char c, const char *s)
+{
+	int i;
+
+	i = 0;
+	while (*s == c && *s != '\0')
+	{
+		i++;
+		s++;
+	}
+	return(i);
+}
+
 char			**ft_strsplit(char const *s, char c)
 {
 	char	**t;
 	int		nb_word;
 	int		index;
+	char	*tmp;
 
 	if (!s)
 		return (NULL);
@@ -62,9 +76,10 @@ char			**ft_strsplit(char const *s, char c)
 		return (NULL);
 	while (nb_word--)
 	{
-		while (*s == c && *s != '\0')
-			s++;
-		t[index] = ft_strsub((const char *)s, 0, ft_wlen((const char *)s, c));
+		s += ft_norme(c, s);
+		tmp = ft_strsub((const char *)s, 0, ft_wlen((const char *)s, c));
+		t[index] = tmp;
+		free(tmp);
 		if (t[index] == NULL)
 			return (NULL);
 		s = s + ft_wlen(s, c);
