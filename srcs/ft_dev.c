@@ -1,80 +1,53 @@
 #include "mini.h"
 
-void ft_dev4(char *str, pid_t id)
+int		ft_test(char *str)
 {
-	char **tab;
-	int i;
+	int				i;
+	struct dirent	*fichierlu[2];
+	DIR				*rep;
 
-	if(id == 0 && ft_strncmp(str, "cp", 2) == 0)
-	{
-		tab = ft_strsplit(str, ' ');
-		while(tab[++i] != NULL)
-			tab[i][ft_strlen(tab[i]) - 1] = 0;
-		execve("/bin/cp", tab, NULL);
-		ft_libre(tab);
-	}
-	if(id == 0 && ft_strncmp(str, "csh", 3) == 0)
-	{
-		tab = ft_strsplit(str, ' ');
-		while(tab[++i] != NULL)
-			tab[i][ft_strlen(tab[i]) - 1] = 0;
-		execve("/bin/csh", tab, NULL);
-		ft_libre(tab);
-	}
-	// /ft_dev4(str, id)
+	i = 0;
+	rep = NULL;
+	if (str == NULL || !(rep = opendir(str)))
+		return (0);
+	while ((fichierlu[0] = readdir(rep)) != NULL)
+		i++;
+	closedir(rep);
+	return (i);
 }
 
-void ft_dev3(char *str, pid_t id)
+int is_in(char *path, char *commande)
 {
-	char **tab;
+	DIR *rep;
+	struct dirent	*fichierlu[ft_test(path) + 1];
 	int i;
 
-	if(id == 0 && ft_strncmp(str, "chmod", 5) == 0)
+	i = 0;
+	if (!(rep = opendir(path)))
+		return (-1);
+//	while(commande[i] != 0 &&  commande[i] != ' ' && commande[i] != '\n')
+//		i++;
+//	commande[i] = 0;
+//	i = 0;
+//	if(ft_strcmp("env", commande) == 0)
+//	{
+//		ft_putstr("oui");
+//		return(0);
+//	}
+	while ((fichierlu[i] = readdir(rep)) != NULL)
 	{
-		tab = ft_strsplit(str, ' ');
-		while(tab[++i] != NULL)
-			tab[i][ft_strlen(tab[i]) - 1] = 0;
-		execve("/bin/chmod", tab, NULL);
-		ft_libre(tab);
+		if(ft_strncmp(fichierlu[i]->d_name, commande, ft_strlen(fichierlu[i]->d_name)) == 0)
+		{
+			closedir(rep);
+			return (1);
+		}
+		i++;
 	}
-	if(id == 0 && ft_strncmp(str, "cat", 3) == 0)
-	{
-		tab = ft_strsplit(str, ' ');
-		while(tab[++i] != NULL)
-			tab[i][ft_strlen(tab[i]) - 1] = 0;
-		execve("/bin/cat", tab, NULL);
-		ft_libre(tab);
-	}
-	ft_dev4(str, id);
+	closedir(rep);
+	return(0);
 }
 
 void ft_dev2(char *str, pid_t id)
-{
-	char **tab;
-	int i;
-
-	if(id == 0 && ft_strncmp(str, "[", 1) == 0)
-	{
-		tab = ft_strsplit(str, ' ');
-		while(tab[++i] != NULL)
-			tab[i][ft_strlen(tab[i]) - 1] = 0;
-		execve("/bin/[", tab, NULL);
-		ft_libre(tab);
-	}
-	if(id == 0 && ft_strncmp(str, "bash", 4) == 0)
-	{
-		tab = ft_strsplit(str, ' ');
-		while(tab[++i] != NULL)
-			tab[i][ft_strlen(tab[i]) - 1] = 0;
-		execve("/bin/bash", tab, NULL);
-		ft_libre(tab);
-	}
-	ft_dev3(str, id);
-}
-
-
-
-void ft_dev(char *str, pid_t id)
 {
 	char **tab;
 	int i;
@@ -82,12 +55,45 @@ void ft_dev(char *str, pid_t id)
 	char *str3;
 
 	i = 0;
-	if(id == 0)
+	if(is_in("/usr/bin/", str) && id == 0)
 	{
 		tab = ft_strsplit(str, ' ');
-		while(tab[++i] != NULL)
-			tab[i][ft_strlen(tab[i]) - 1] = 0;
+		str2[0] = '/';
+		str2[1] = 'u';
+		str2[2] = 's';
+		str2[3] = 'r';
+		str2[4] = '/';
+		str2[5] = 'b';
+		str2[6] = 'i';
+		str2[7] = 'n';
+		str2[8] = '/';
+		int b = 9;
+		i = 0;
+		while (ft_isalnum(str[i]))
+		{
+			str2[b] = str[i];
+			i++;
+			b++;
+		}
+		str2[b] = '\0';
+		execve(str2, tab, NULL);
+		ft_libre(tab);
+		return ;
+	}
+}
 
+void ft_dev(char *str, pid_t id)
+{
+	//char *tab[4] = {"ls", "-a", "-l", NULL};
+	char **tab;
+	int i;
+	char str2[42];
+	char *str3;
+
+	i = 0;
+	if(is_in("/bin/", str) && id == 0)
+	{
+		tab = ft_strsplit(str, ' ');
 		str2[0] = '/';
 		str2[1] = 'b';
 		str2[2] = 'i';
@@ -102,17 +108,9 @@ void ft_dev(char *str, pid_t id)
 			b++;
 		}
 		str2[b] = '\0';
-		//ft_putstr(str2);
+		//ft_putstr(tab[1]);
 		execve(str2, tab, NULL);
-		//ft_libre(tab);
-	}
-/*	if(id == 0 && ft_strncmp(str, "pwd", 3) == 0)
-	{
-		tab = ft_strsplit(str, ' ');
-		while(tab[++i] != NULL)
-			tab[i][ft_strlen(tab[i]) - 1] = 0;
-		execve("/bin/pwd", tab, NULL);
 		ft_libre(tab);
-	}*/
-	//ft_dev2(str, id);
+	}
+	ft_dev2(str, id);
 }
