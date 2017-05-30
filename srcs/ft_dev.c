@@ -58,15 +58,7 @@ void ft_dev2(char *str, pid_t id)
 	if(is_in("/usr/bin/", str) && id == 0)
 	{
 		tab = ft_strsplit(str, ' ');
-		str2[0] = '/';
-		str2[1] = 'u';
-		str2[2] = 's';
-		str2[3] = 'r';
-		str2[4] = '/';
-		str2[5] = 'b';
-		str2[6] = 'i';
-		str2[7] = 'n';
-		str2[8] = '/';
+		ft_strcpy(str2, "/usr/bin/");
 		int b = 9;
 		i = 0;
 		while (ft_isalnum(str[i]))
@@ -94,11 +86,7 @@ void ft_dev(char *str, pid_t id)
 	if(is_in("/bin/", str) && id == 0)
 	{
 		tab = ft_strsplit(str, ' ');
-		str2[0] = '/';
-		str2[1] = 'b';
-		str2[2] = 'i';
-		str2[3] = 'n';
-		str2[4] = '/';
+		ft_strcpy(str2, "/bin/");
 		int b = 5;
 		i = 0;
 		while (ft_isalnum(str[i]))
