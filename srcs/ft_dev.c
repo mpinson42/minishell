@@ -53,15 +53,43 @@ void ft_dev(char *str, pid_t id, t_glob *g)
 	char **tab2;
 	int i;
 	int j;
+	int b
 	char str2[42];
 	char *str3;
+	char test[5000];
 
 	i = 0;
 
 
 
+
+
 	if(id == 0)
 	{
+
+
+		if(is_in(getcwd(test, 4999), str + 2))
+		{
+			tab = ft_strsplit(str, ' ');
+			ft_strcpy(str2, "./");
+			b = 2;
+			i = 0;
+			while (str[i])
+			{
+				str2[b] = str[i];
+				i++;
+				b++;
+			}
+			str2[b] = '\0';
+			execve(str2, tab, NULL);
+			return ;
+		}
+
+
+
+
+
+
 		while(g->env[i] && ft_strncmp(g->env[i], "PATH=", 5) != 0)
 			i++;
 		tab2 = ft_strsplit(g->env[i] + 5, ':');
@@ -71,10 +99,11 @@ void ft_dev(char *str, pid_t id, t_glob *g)
 		{
 			if(is_in(tab2[j], str))
 			{
+				ft_putstr(tab2[j]);
 				tab2[j] = ft_strjoin(tab2[j], "/");
 				tab = ft_strsplit(str, ' ');
 				ft_strcpy(str2, tab2[j]);
-				int b = ft_strlen(tab2[j]);
+				b = ft_strlen(tab2[j]);
 				i = 0;
 				while (ft_isalnum(str[i]))
 				{
@@ -89,6 +118,20 @@ void ft_dev(char *str, pid_t id, t_glob *g)
 			}
 			j++;
 		}
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
 		ft_libre(tab);
 	}
 }

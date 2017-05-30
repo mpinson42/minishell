@@ -60,9 +60,32 @@ void ft_set_env(char *str, char **env, pid_t id, t_glob *g)
 
 
 	tab = ft_strsplit(str, ' ');
+	if(tab[1] == NULL)
+	{
+		ft_libre(tab);
+		return ;
+	}
 	tmp = ft_strjoin(tab[1], "=");
-	var = ft_strjoin(tmp, tab[2]);
+	if(tab[2])
+		var = ft_strjoin(tmp, tab[2]);
+	else
+		var = ft_strjoin(tab[1], "=");
 	free(tmp);
+
+
+	i = 0;
+	while(g->env[i] && ft_strncmp(g->env[i], tab[1], ft_strlen(tab[1])) != 0)
+			i++;
+	if(g->env[i] != NULL)
+	{
+		ft_libre(tab);
+		free(g->env[i]);
+		g->env[i] = var;
+		return;
+	}
+
+
+
 	i = 0;
 	j = 0;
 	test = (char**)malloc(sizeof(char*) * (ft_strlen_tab(g->env) + 2));
@@ -77,6 +100,7 @@ void ft_set_env(char *str, char **env, pid_t id, t_glob *g)
 	//ft_libre3(g);
 	i = 0;
 	j = 0;
+	ft_libre(g->env);
 	if(!(g->env = (char **)malloc(sizeof(char *) * (ft_strlen_tab(test) + 1))))
 		return ;
 	while(test[i] != NULL)
@@ -197,17 +221,20 @@ int ft_cd(char *str, char **env, pid_t id, t_glob *g)
 	char *old_pwd;
 	DIR *rep;
 	char test[5000];
+	char *tmp;
 
 	i = 0;
 	if(ft_strncmp("cd", str, 2) == 0)
 	{
 		tab = ft_strsplit(str, ' ');
-		if (tab[1] && !(rep = opendir(tab[1])))
+		if (tab[1] && ft_strncmp(tab[1], "-", 1) != 0 && !(rep = opendir(tab[1])))
 		{
 			ft_putendl("cd: no such file or directory");
 			ft_libre(tab);
 			return (1);
 		}
+		if(tab[1] && ft_strncmp(tab[1], "-", 1) != 0)
+			closedir(rep);
 		if(tab[1] == NULL)
 		{
 			while(g->env[i] != NULL && ft_strncmp(g->env[i], "OLDPWD=", 7) != 0)
@@ -221,6 +248,7 @@ int ft_cd(char *str, char **env, pid_t id, t_glob *g)
 				if(g->env[i] == NULL)
 					ft_set_env("setenv HOME /Users/mpinson", g->env, id, g);
 				chdir("/Users/mpinson");
+				ft_set_env("setenv PWD /Users/mpinson", g->env, id, g);
 			}
 			else
 			{
@@ -232,6 +260,7 @@ int ft_cd(char *str, char **env, pid_t id, t_glob *g)
 				if(g->env[i] == NULL)
 					ft_set_env("setenv HOME /Users/mpinson", g->env, id, g);
 				chdir("/Users/mpinson");
+				ft_set_env("setenv PWD /Users/mpinson", g->env, id, g);
 			}
 		}
 		else if(ft_strncmp(tab[1], "-", 1) == 0)
@@ -241,6 +270,7 @@ int ft_cd(char *str, char **env, pid_t id, t_glob *g)
 			if(g->env[i] == NULL)
 			{
 				ft_set_env("setenv OLDPWD /", g->env, id, g);
+				ft_set_env("setenv PWD /", g->env, id, g);
 				chdir("/");
 			}
 			else
@@ -249,6 +279,9 @@ int ft_cd(char *str, char **env, pid_t id, t_glob *g)
 				old_pwd = ft_strsub(g->env[i], 7, ft_strlen(g->env[i]));
 				g->env[i] = ft_strjoin("OLDPWD=", getcwd(test, 4999));
 				chdir(old_pwd);
+				tmp = ft_strjoin("setenv PWD ", old_pwd);
+				ft_set_env(tmp, g->env, id, g);
+				free(tmp);
 			}
 		}
 		else
@@ -259,12 +292,18 @@ int ft_cd(char *str, char **env, pid_t id, t_glob *g)
 			{
 				ft_set_env("setenv OLDPWD /", g->env, id, g);
 				chdir(tab[1]);
+				tmp = ft_strjoin("setenv PWD ", getcwd(test, 4999));
+				ft_set_env(tmp, g->env, id, g);
+				free(tmp);
 			}
 			else
 			{
 				free(g->env[i]);
 				g->env[i] = ft_strjoin("OLDPWD=", getcwd(test, 4999));
 				chdir(tab[1]);
+				tmp = ft_strjoin("setenv PWD ", getcwd(test, 4999));
+				ft_set_env(tmp, g->env, id, g);
+				free(tmp);
 			}
 		}
 		ft_libre(tab);
@@ -291,9 +330,9 @@ int ft_no(char *str, char **env, pid_t id, t_glob *g)
 		return(1);
 	if(ft_strncmp("setenv", str, 5) == 0)
 	{
-		tab = g->env;
+
 		ft_set_env(str, g->env, id, g);
-		ft_libre2(&tab);
+
 		i = 0;
 		return(1);
 	}
@@ -364,12 +403,32 @@ int ft_check(t_glob *g, char *str)
 	}
 	ft_libre(tab);
 	ft_libre(commande);
+	if(strncmp(str, "./", 2) == 0)
+	{
+		//ft_putstr()
+		commande = ft_strsplit(str + 2, ' ');
+		if (!(rep = opendir("./")))
+			return(1);
+		j = 0;
+		while ((fichierlu[j] = readdir(rep)) != NULL)
+		{
+			if(ft_strcmp(fichierlu[j]->d_name, commande[0]) == 0)
+			{
+				//ft_libre(tab);
+				ft_libre(commande);
+				closedir(rep);
+				return (0);
+			}
+			j++;
+		}
+		closedir(rep);
+	}
 	return(1);
 }
 
 int main(int argc, char **argv, char **env)
 {
-	char str[100];
+	char str[5000];
 	pid_t id;
 	int i;
 	t_glob g;
@@ -378,9 +437,9 @@ int main(int argc, char **argv, char **env)
 	while(1)
 	{
 		
-		ft_bzero(str, 100);
-		ft_putstr("$@MPINSON>");
-		read(0, &str, 99);
+		ft_bzero(str, 5000);
+		ft_putstr("$1.0shelldon>");
+		read(0, &str, 5000);
 		str[ft_strlen(str) - 1] = 0;
 		if(ft_no(str, env, id, &g) == 1)
 			continue ;
