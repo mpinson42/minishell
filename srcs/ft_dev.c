@@ -53,7 +53,7 @@ void ft_dev(char *str, pid_t id, t_glob *g)
 	char **tab2;
 	int i;
 	int j;
-	int b
+	int b;
 	char str2[42];
 	char *str3;
 	char test[5000];
@@ -99,7 +99,6 @@ void ft_dev(char *str, pid_t id, t_glob *g)
 		{
 			if(is_in(tab2[j], str))
 			{
-				ft_putstr(tab2[j]);
 				tab2[j] = ft_strjoin(tab2[j], "/");
 				tab = ft_strsplit(str, ' ');
 				ft_strcpy(str2, tab2[j]);

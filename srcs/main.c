@@ -1,5 +1,17 @@
 #include "mini.h"
 
+int isex(char *str)
+{
+	struct stat s;
+	if (lstat(str, &s) == -1)
+		return (0);
+	if(s.st_mode & S_IXUSR && s.st_mode & S_IXGRP && s.st_mode & S_IXOTH)
+	{
+		return(1);
+	}
+	return(0);
+}
+
 void ft_libre(char **tab)
 {
 	int i;
@@ -137,7 +149,6 @@ void ft_unset_env(char *str, char **env, pid_t id, t_glob *g)
 		ft_libre(tab);
 		return ;
 	}
-	
 	i = 0;
 	j = 0;
 	test = (char**)malloc(sizeof(char*) * (ft_strlen_tab(g->env) + 2));
@@ -147,7 +158,7 @@ void ft_unset_env(char *str, char **env, pid_t id, t_glob *g)
 		i++;
 		j++;
 	}
-	test[i] = NULL;
+	test[j] = NULL;
 
 	i = 0;
 	j = 0;
@@ -403,7 +414,7 @@ int ft_check(t_glob *g, char *str)
 	}
 	ft_libre(tab);
 	ft_libre(commande);
-	if(strncmp(str, "./", 2) == 0)
+	if(strncmp(str, "./", 2) == 0 && isex(str) == 1)
 	{
 		//ft_putstr()
 		commande = ft_strsplit(str + 2, ' ');
@@ -426,21 +437,77 @@ int ft_check(t_glob *g, char *str)
 	return(1);
 }
 
+int ft_isdir(char *str)
+{
+	DIR *rep;
+
+	if(!(rep = opendir(str)))
+		return(0);
+	closedir(rep);
+	return(1);
+}
+
+void ft_pronpt()
+{
+	int i;
+	char test[1000];
+	char c;
+
+	getcwd(test, 4999);
+	i = ft_strlen(test);
+	while(i > 0 && test[i] != '/')
+		i--;
+	write(1, "\e[1;32m", 8);
+	ft_putchar(0xe2);
+	ft_putchar(0x9e);
+	ft_putchar(0x9c);
+	ft_putstr(" ");
+	write(1, "\e[1;36m", 8);
+	ft_putstr(test + i + 1);
+	write(1, "\e[0;m", 6);
+	ft_putchar(0xf0);
+	ft_putchar(0x9f);
+	ft_putchar(0xa6);
+	ft_putchar(0x84);
+	ft_putstr("  > ");
+}
+
 int main(int argc, char **argv, char **env)
 {
 	char str[5000];
 	pid_t id;
 	int i;
 	t_glob g;
+	char *tmp;
+
+
 	setup_env(env, &g);
 //	free(env[0]);
 	while(1)
 	{
 		
 		ft_bzero(str, 5000);
-		ft_putstr("$1.0shelldon>");
+		
+		ft_pronpt();
 		read(0, &str, 5000);
 		str[ft_strlen(str) - 1] = 0;
+		i = 0;
+		while(str[i] != 0)
+		{
+			if(str[i] == '\t')
+			{
+				ft_putendl("warning tab");
+				return (0);
+			}
+			i++;
+		}
+		if((str[0] == '/' || ft_strncmp(str, "./", 2) == 0) && ft_isdir(str))
+		{
+			tmp = ft_strjoin("cd ", str);
+			ft_cd(tmp, env, id, &g);
+			free(tmp);
+			continue;
+		}
 		if(ft_no(str, env, id, &g) == 1)
 			continue ;
 		//ft_putnbr(str[ft_strlen(str)]);
