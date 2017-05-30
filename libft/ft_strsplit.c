@@ -52,7 +52,6 @@ char			**ft_strsplit(char const *s, char c)
 	char	**t;
 	int		nb_word;
 	int		index;
-	char *tmp;
 
 	if (!s)
 		return (NULL);
