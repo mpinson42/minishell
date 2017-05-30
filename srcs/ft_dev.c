@@ -73,7 +73,7 @@ void ft_dev2(char *str, pid_t id)
 		return ;
 	}
 }
-
+/*
 void ft_dev(char *str, pid_t id)
 {
 	//char *tab[4] = {"ls", "-a", "-l", NULL};
@@ -101,4 +101,66 @@ void ft_dev(char *str, pid_t id)
 		ft_libre(tab);
 	}
 	ft_dev2(str, id);
+}*/
+
+
+void ft_dev(char *str, pid_t id, t_glob *g)
+{
+	//char *tab[4] = {"ls", "-a", "-l", NULL};
+	char **tab;
+	char **tab2;
+	int i;
+	int j;
+	char str2[42];
+	char *str3;
+
+	i = 0;
+
+
+
+	if(id == 0)
+	{
+		while(g->env[i] && ft_strncmp(g->env[i], "PATH=", 5) != 0)
+			i++;
+		tab2 = ft_strsplit(g->env[i] + 5, ':');
+
+		j = 0;
+		while(tab2[j])
+		{
+			if(is_in(tab2[j], str))
+			{
+				tab2[j] = ft_strjoin(tab2[j], "/");
+				tab = ft_strsplit(str, ' ');
+				ft_strcpy(str2, tab2[j]);
+				int b = ft_strlen(tab2[j]);
+				i = 0;
+				while (ft_isalnum(str[i]))
+				{
+					str2[b] = str[i];
+					i++;
+					b++;
+				}
+				str2[b] = '\0';
+				ft_putstr(str2);
+				execve(str2, tab, NULL);
+				return ;
+			}
+			j++;
+		}
+		ft_libre(tab);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

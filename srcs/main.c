@@ -398,7 +398,7 @@ int main(int argc, char **argv, char **env)
 
 		id = fork();
 		if(ft_strncmp("echo", str, 4) && ft_strncmp("cd", str, 2))
-			ft_dev(str, id);
+			ft_dev(str, id, &g);
 		if(id > 0)
 			wait(&id);
 	}
