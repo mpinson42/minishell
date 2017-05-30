@@ -201,10 +201,12 @@ int ft_env(char *str, char **env, pid_t id, t_glob *g)
 	return(0);
 }
 
-int ft_echo(char *str, char **env, pid_t id)
+int ft_echo(char *str, char **env, pid_t id, t_glob *g)
 {
 	int i;
+	int j;
 	char **tab;
+	char *tmp;
 
 	tab = ft_strsplit(str, ' ');
 	if(ft_strcmp("echo", tab[0]) == 0)
@@ -212,7 +214,35 @@ int ft_echo(char *str, char **env, pid_t id)
 		i = 5;
 		while(str[i])
 		{
-			if(str[i] != '"')
+			if(str[i] == '$')
+			{
+				i++;
+				j = i;
+				while(str[j] && str[j] != ' ')
+					j++;
+				tmp = ft_strsub(str, i, ft_absolut(i - j));
+				i = i + ft_strlen(tmp) - 1;
+				j = 0;
+				while(g->env[j] && ft_strncmp(g->env[j], tmp, ft_strlen(tmp)) != 0)
+					j++;
+				if(g->env[j] != NULL)
+				{
+					ft_putstr(g->env[j] + ft_strlen(tmp) + 1);
+				}
+
+				free(tmp);
+
+
+			//	ft_putstr("-->");
+			//	ft_putstr(tmp);
+				//ft_putstr("\n");
+
+			}
+			else if(str[i] == '\\')
+			{
+				ft_putstr("\n");
+			}
+			else if(str[i] != '"')
 				ft_putchar(str[i]);
 			i++;
 		}
@@ -335,7 +365,7 @@ int ft_no(char *str, char **env, pid_t id, t_glob *g)
 	{
 		return(1);
 	}
-	if(ft_echo(str, env, id) == 1)
+	if(ft_echo(str, env, id, g) == 1)
 		return(1);
 	if(ft_cd(str, env, id, g) == 1)
 		return(1);
@@ -461,7 +491,7 @@ void ft_pronpt()
 	ft_putchar(0xe2);
 	ft_putchar(0x9e);
 	ft_putchar(0x9c);
-	ft_putstr(" ");
+	ft_putstr("  ");
 	write(1, "\e[1;36m", 8);
 	ft_putstr(test + i + 1);
 	write(1, "\e[0;m", 6);
@@ -477,8 +507,10 @@ int main(int argc, char **argv, char **env)
 	char str[5000];
 	pid_t id;
 	int i;
+	int j;
 	t_glob g;
 	char *tmp;
+	char **tab;
 
 
 	setup_env(env, &g);
@@ -487,45 +519,65 @@ int main(int argc, char **argv, char **env)
 	{
 		
 		ft_bzero(str, 5000);
-		
 		ft_pronpt();
 		read(0, &str, 5000);
-		str[ft_strlen(str) - 1] = 0;
 		i = 0;
-		while(str[i] != 0)
+		while(str[i])
 		{
-			if(str[i] == '\t')
-			{
-				ft_putendl("warning tab");
-				return (0);
-			}
+			if(str[i] == '\n')
+				str[i] = 0;
 			i++;
 		}
-		if((str[0] == '/' || ft_strncmp(str, "./", 2) == 0) && ft_isdir(str))
+		tab = ft_strsplit(str, ';');
+		j =-1;
+		while(tab[++j])
 		{
-			tmp = ft_strjoin("cd ", str);
-			ft_cd(tmp, env, id, &g);
-			free(tmp);
-			continue;
+			i = 0;
+			while(tab[j][i] == ' ')
+				i++;
+			if(i)
+			{
+				tmp = ft_strsub(tab[j], i, ft_strlen(tab[j]));
+				free(tab[j]);
+				tab[j] = tmp;
+			}
+			i = 0;
+			while(tab[j][i] != 0)
+			{
+				if(tab[j][i] == '\t')
+				{
+					ft_putendl("warning tab");
+					return (0);
+				}
+				i++;
+			}
+			if((tab[j][0] == '/' || ft_strncmp(tab[j], "./", 2) == 0) && ft_isdir(tab[j]))
+			{
+				tmp = ft_strjoin("cd ", tab[j]);
+				ft_cd(tmp, env, id, &g);
+				free(tmp);
+				continue;
+			}
+			if(ft_no(tab[j], env, id, &g) == 1)
+				continue ;
+			//ft_putnbr(str[ft_strlen(str)]);
+			// /printf("%d\n", str[5]);
+			if(ft_strncmp(tab[j], "exit", 4) == 0)
+				return(0);
+	
+			if(ft_check(&g, tab[j]) == 1)
+			{
+				ft_putendl("error : commande not fond");
+				continue ;
+			}
+
+
+			id = fork();
+			if(ft_strncmp("echo", tab[j], 4) && ft_strncmp("cd", tab[j], 2))
+				ft_dev(tab[j], id, &g);
+			if(id > 0)
+				wait(&id);
 		}
-		if(ft_no(str, env, id, &g) == 1)
-			continue ;
-		//ft_putnbr(str[ft_strlen(str)]);
-		// /printf("%d\n", str[5]);
-		if(ft_strncmp(str, "exit", 4) == 0)
-			return(0);
-
-		if(ft_check(&g, str) == 1)
-		{
-			ft_putendl("error : commande not fond");
-			continue ;
-		}
-
-
-		id = fork();
-		if(ft_strncmp("echo", str, 4) && ft_strncmp("cd", str, 2))
-			ft_dev(str, id, &g);
-		if(id > 0)
-			wait(&id);
+		ft_libre(tab);
 	}
 }
