@@ -238,10 +238,6 @@ int ft_echo(char *str, char **env, pid_t id, t_glob *g)
 				//ft_putstr("\n");
 
 			}
-			else if(str[i] == '\\')
-			{
-				ft_putstr("\n");
-			}
 			else if(str[i] != '"')
 				ft_putchar(str[i]);
 			i++;

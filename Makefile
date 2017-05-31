@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC = srcs/ft_dev.c srcs/main.c 
+SRC = srcs/ft_dev.c srcs/main.c srcs/ft_strsplit_free.c 
 
 FLAGS = -Wall -Wextra -Werror
 

@@ -54,7 +54,7 @@ void ft_dev(char *str, pid_t id, t_glob *g)
 	int i;
 	int j;
 	int b;
-	char str2[42];
+	char str2[5000];
 	char *str3;
 	char test[5000];
 
@@ -81,6 +81,7 @@ void ft_dev(char *str, pid_t id, t_glob *g)
 				b++;
 			}
 			str2[b] = '\0';
+			//printf("%s\n", tab[0]);
 			execve(str2, tab, NULL);
 			return ;
 		}
