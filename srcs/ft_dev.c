@@ -25,15 +25,6 @@ int is_in(char *path, char *commande)
 	i = 0;
 	if (!(rep = opendir(path)))
 		return (-1);
-//	while(commande[i] != 0 &&  commande[i] != ' ' && commande[i] != '\n')
-//		i++;
-//	commande[i] = 0;
-//	i = 0;
-//	if(ft_strcmp("env", commande) == 0)
-//	{
-//		ft_putstr("oui");
-//		return(0);
-//	}
 	while ((fichierlu[i] = readdir(rep)) != NULL)
 	{
 		if(ft_strncmp(fichierlu[i]->d_name, commande, ft_strlen(fichierlu[i]->d_name)) == 0)
@@ -47,92 +38,80 @@ int is_in(char *path, char *commande)
 	return(0);
 }
 
-void ft_dev(char *str, pid_t id, t_glob *g)
+int ft_dev1(char *str)
 {
-	char **tab;
-	char **tab2;
 	int i;
-	int j;
 	int b;
+	char **tab;
 	char str2[5000];
-	char *str3;
 	char test[5000];
 
+	if(is_in(getcwd(test, 4999), str + 2))
+	{
+		tab = ft_strsplit(str, ' ');
+		ft_strcpy(str2, "./");
+		b = 2;
+		i = 0;
+		while (str[i])
+		{
+			str2[b] = str[i];
+			i++;
+			b++;
+		}
+		str2[b] = '\0';
+		execve(str2, tab, NULL);
+		return (-1);
+	}
+	return(0);
+}
+
+int ft_dev2(char *str, int j, char **tab2)
+{
+	char **tab;
+	int i;
+	int b;
+	char str2[5000];
+
+	if(is_in(tab2[j], str))
+	{
+		tab2[j] = ft_strjoin(tab2[j], "/");
+		tab = ft_strsplit(str, ' ');
+		ft_strcpy(str2, tab2[j]);
+		b = ft_strlen(tab2[j]);
+		i = 0;
+		while (ft_isalnum(str[i]))
+		{
+			str2[b] = str[i];
+			i++;
+			b++;
+		}
+		str2[b] = '\0';
+		execve(str2, tab, NULL);
+		return (-1);
+	}
+	return (0);
+}
+
+void ft_dev(char *str, pid_t id, t_glob *g)
+{
+	char **tab2;
+	int i;
+
 	i = 0;
-
-
-
-
-
 	if(id == 0)
 	{
-
-
-		if(is_in(getcwd(test, 4999), str + 2))
-		{
-			tab = ft_strsplit(str, ' ');
-			ft_strcpy(str2, "./");
-			b = 2;
-			i = 0;
-			while (str[i])
-			{
-				str2[b] = str[i];
-				i++;
-				b++;
-			}
-			str2[b] = '\0';
-			//printf("%s\n", tab[0]);
-			execve(str2, tab, NULL);
+		if(ft_dev1(str) == -1)
 			return ;
-		}
-
-
-
-
-
-
 		while(g->env[i] && ft_strncmp(g->env[i], "PATH=", 5) != 0)
 			i++;
 		tab2 = ft_strsplit(g->env[i] + 5, ':');
 
-		j = 0;
-		while(tab2[j])
+		i = -1;
+		while(tab2[++i])
 		{
-			if(is_in(tab2[j], str))
-			{
-				tab2[j] = ft_strjoin(tab2[j], "/");
-				tab = ft_strsplit(str, ' ');
-				ft_strcpy(str2, tab2[j]);
-				b = ft_strlen(tab2[j]);
-				i = 0;
-				while (ft_isalnum(str[i]))
-				{
-					str2[b] = str[i];
-					i++;
-					b++;
-				}
-				str2[b] = '\0';
-				//ft_putstr(str2);
-				execve(str2, tab, NULL);
+			if(ft_dev2(str, i, tab2) == -1)
 				return ;
-			}
-			j++;
 		}
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-		ft_libre(tab);
 	}
 }
 

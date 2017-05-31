@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC = srcs/ft_dev.c srcs/main.c srcs/ft_strsplit_free.c 
+SRC = srcs/ft_dev.c srcs/main.c srcs/ft_setenv.c srcs/ft_unsetenv.c srcs/ft_env.c srcs/ft_echo.c srcs/ft_cd.c
 
 FLAGS = -Wall -Wextra -Werror
 
@@ -15,7 +15,7 @@ $(NAME): $(SRC)
 	@echo "mpinson" > auteur
 	@make -C ./libft all
 	@cp ./libft/libft.a ./lib
-	gcc -I ./include/ -L ./lib -lft -o $(NAME) $(SRC)
+	gcc $(FLAGS) -I ./include/ -L ./lib -lft -o $(NAME) $(SRC)
 
 
 clean:

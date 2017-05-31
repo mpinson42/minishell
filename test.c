@@ -1,14 +1,6 @@
 #include "libft.h"
 
-int main(int argc, char **argv)
+int main()
 {
-	int i;
-
-	i = 1;
-	while(argv[i])
-	{
-		ft_putendl(argv[i]);
-		i++;
-	}
-	return(0);
+	write(1,"caca", 4);
 }
