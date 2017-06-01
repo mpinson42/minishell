@@ -6,7 +6,7 @@
 /*   By: mpinson <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/01 13:35:00 by mpinson           #+#    #+#             */
-/*   Updated: 2017/06/01 13:35:02 by mpinson          ###   ########.fr       */
+/*   Updated: 2017/06/01 13:47:02 by mpinson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,6 @@ int				ft_strlen_tab(char **tab);
 void			ft_libre(char **tab);
 int				isex(char *str);
 int				ft_no(char *str, t_glob *g);
-void			setup_env(char **env, t_glob *g);
+int				setup_env(char **env, t_glob *g);
 
 #endif

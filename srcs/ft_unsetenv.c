@@ -50,7 +50,8 @@ void	ft_unset_env(char *str, t_glob *g)
 		return ;
 	}
 	i = -1;
-	test = (char**)malloc(sizeof(char*) * (ft_strlen_tab(g->env) + 2));
+	if (!(test = (char**)malloc(sizeof(char*) * (ft_strlen_tab(g->env) + 2))))
+		return ;
 	while (g->env[++i])
 		test[i] = ft_strdup(g->env[i]);
 	test[i] = NULL;

@@ -33,7 +33,7 @@ int		ft_no(char *str, t_glob *g)
 	return (0);
 }
 
-void	setup_env(char **env, t_glob *g)
+int		setup_env(char **env, t_glob *g)
 {
 	int i;
 	int j;
@@ -41,7 +41,7 @@ void	setup_env(char **env, t_glob *g)
 	i = 0;
 	j = 0;
 	if (!(g->env = (char **)malloc(sizeof(char *) * (ft_strlen_tab(env) + 1))))
-		return ;
+		return (-1);
 	while (env[i])
 	{
 		g->env[j] = ft_strdup(env[i]);
@@ -49,4 +49,5 @@ void	setup_env(char **env, t_glob *g)
 		j++;
 	}
 	g->env[j] = NULL;
+	return (0);
 }

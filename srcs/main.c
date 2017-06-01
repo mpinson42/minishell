@@ -26,7 +26,8 @@ int		main2(char (*str)[5000], char ***tab)
 		if (str[0][i] == '\n')
 			str[0][i] = 0;
 	}
-	tab[0] = ft_strsplit(str[0], ';');
+	if (!(tab[0] = ft_strsplit(str[0], ';')))
+		return (-1);
 	return (0);
 }
 
@@ -37,7 +38,9 @@ int		main3(t_main *m, t_glob *g)
 		m->i++;
 	if (m->i)
 	{
-		m->tmp = ft_strsub(m->tab[m->j], m->i, ft_strlen(m->tab[m->j]));
+		if (!(m->tmp = ft_strsub(m->tab[m->j], m->i,
+			ft_strlen(m->tab[m->j]))))
+			return (-1);
 		free(m->tab[m->j]);
 		m->tab[m->j] = m->tmp;
 	}
@@ -75,7 +78,8 @@ int		main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	setup_env(env, &g);
+	if (setup_env(env, &g) == -1)
+		return (-1);
 	while (1)
 	{
 		if (main2(&m.str, &m.tab) == -1)

@@ -86,7 +86,7 @@ int		ft_check(t_glob *g, char *str)
 		return (1);
 	if (ft_check3(commande, tab, -1) == 0)
 		return (0);
-	if (strncmp(str, "./", 2) == 0 && isex(str) == 1)
+	if (ft_strncmp(str, "./", 2) == 0 && isex(str) == 1)
 	{
 		return (ft_check4(commande, str));
 	}

@@ -4,7 +4,7 @@ SRC = srcs/ft_dev.c srcs/main.c srcs/ft_setenv.c srcs/ft_unsetenv.c srcs/ft_env.
 
 FLAGS = -Wall -Wextra -Werror
 
-SRC2 = dev.o srcs.o
+SRC2 = ft_dev.o main.o ft_setenv.o ft_unsetenv.o ft_env.o ft_echo.o ft_cd.o ft_check.o ft_outils.o ft_setup.o
 
 all: $(NAME)
 
