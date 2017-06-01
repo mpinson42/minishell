@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC = srcs/ft_dev.c srcs/main.c srcs/ft_setenv.c srcs/ft_unsetenv.c srcs/ft_env.c srcs/ft_echo.c srcs/ft_cd.c
+SRC = srcs/ft_dev.c srcs/main.c srcs/ft_setenv.c srcs/ft_unsetenv.c srcs/ft_env.c srcs/ft_echo.c srcs/ft_cd.c srcs/ft_check.c srcs/ft_outils.c srcs/ft_setup.c
 
 FLAGS = -Wall -Wextra -Werror
 

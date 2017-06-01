@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mini.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mpinson <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/06/01 13:35:00 by mpinson           #+#    #+#             */
+/*   Updated: 2017/06/01 13:35:02 by mpinson          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINI_H
 # define MINI_H
 
@@ -16,22 +28,38 @@
 
 typedef struct	s_glob
 {
-	char **env;
-	char **tab;
-	char *tmp;
+	char		**env;
+	char		**tab;
+	char		*tmp;
 }				t_glob;
 
-void ft_dev(char *str, pid_t id, t_glob *g);
-void ft_libre(char **tab);
-char			**ft_strsplit_free(char const *s, char c);
-void ft_strsub_free(char const *s, unsigned int start, size_t len, t_glob *g);
+typedef struct	s_main
+{
+	char		str[5000];
+	pid_t		id;
+	int			i;
+	int			j;
+	char		*tmp;
+	char		**tab;
+}				t_main;
 
+void			ft_dev(char *str, pid_t id, t_glob *g);
+void			ft_libre(char **tab);
 char			**ft_strsplit2(char*s, char c);
-void ft_set_env(char *str, t_glob *g);
-int ft_strlen_tab(char **tab);
-void ft_unset_env(char *str, t_glob *g);
-int ft_env(char *str, t_glob *g);
-int ft_echo(char *str, t_glob *g);
-int ft_cd(char *str, t_glob *g);
+void			ft_set_env(char *str, t_glob *g);
+int				ft_strlen_tab(char **tab);
+void			ft_unset_env(char *str, t_glob *g);
+int				ft_env(char *str, t_glob *g);
+int				ft_echo(char *str, t_glob *g);
+int				ft_cd(char *str, t_glob *g);
+int				ft_check(t_glob *g, char *str);
+int				isex(char *str);
+void			ft_pronpt(void);
+int				ft_isdir(char *str);
+int				ft_strlen_tab(char **tab);
+void			ft_libre(char **tab);
+int				isex(char *str);
+int				ft_no(char *str, t_glob *g);
+void			setup_env(char **env, t_glob *g);
 
 #endif
