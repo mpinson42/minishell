@@ -82,7 +82,7 @@ int		ft_check(t_glob *g, char *str)
 {
 	char			**tab;
 	char			**commande;
-	int i;
+	int				i;
 
 	i = ft_check2(g, &tab, &commande, str);
 	if (i != 1 && ft_check3(commande, tab, -1) == 0)

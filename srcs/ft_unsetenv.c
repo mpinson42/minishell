@@ -14,9 +14,9 @@
 
 void	ft_unsetenv(char **test, char **tab, t_glob *g)
 {
-	int i;
-	int j;
-	char *tmp;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	i = 0;
 	j = 0;

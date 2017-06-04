@@ -12,6 +12,20 @@
 
 #include "mini.h"
 
+int		ft_slah(char *str)
+{
+	char **tab;
+
+	if (str[0] == '/')
+	{
+		tab = ft_strsplit(str, ' ');
+		execve(tab[0], tab, NULL);
+		ft_libre(tab);
+		return (-1);
+	}
+	return (0);
+}
+
 int		ft_no(char *str, t_glob *g)
 {
 	if (ft_env(str, g) == 1)
@@ -40,7 +54,8 @@ int		setup_env(char ***env, t_glob *g)
 
 	i = 0;
 	j = 0;
-	if (!(g->env = (char **)malloc(sizeof(char *) * (ft_strlen_tab(env[0]) + 1))))
+	if (!(g->env = (char **)malloc(sizeof(char *) *
+		(ft_strlen_tab(env[0]) + 1))))
 		return (-1);
 	while (env[0][i])
 	{
