@@ -73,6 +73,7 @@ int		ft_check4(char **commande, char *str)
 			return (0);
 		}
 	}
+	ft_libre(commande);
 	closedir(rep);
 	return (0);
 }
@@ -81,14 +82,17 @@ int		ft_check(t_glob *g, char *str)
 {
 	char			**tab;
 	char			**commande;
+	int i;
 
-	if (ft_check2(g, &tab, &commande, str) == 1)
-		return (1);
-	if (ft_check3(commande, tab, -1) == 0)
+	i = ft_check2(g, &tab, &commande, str);
+	if (i != 1 && ft_check3(commande, tab, -1) == 0)
 		return (0);
-	if (ft_strncmp(str, "./", 2) == 0 && isex(str) == 1)
+	commande = ft_strsplit(str, ' ');
+	if (isex(commande[0]) == 1)
 	{
+		ft_libre(commande);
 		return (ft_check4(commande, str));
 	}
+	ft_libre(commande);
 	return (1);
 }

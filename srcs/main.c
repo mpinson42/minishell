@@ -26,7 +26,19 @@ int		main2(char (*str)[5000], char ***tab)
 		if (str[0][i] == '\n')
 			str[0][i] = 0;
 	}
-	if (!(tab[0] = ft_strsplit(str[0], ';')))
+	i = ft_strlen(str[0]) - 1;
+	while (i >= 0 && (str[0][i] == ' ' || str[0][i] == '\t' || str[0][i] == '\n' || str[0][i] == 0))
+	{
+			str[0][i] = 0;
+		i--;
+	}
+	i = -1;
+	while(str[0][++i])
+	{
+		if((str[0][i] == ' ') && i == (int)ft_strlen(str[0]) - 1)
+			return (-1) ;
+	}
+	if (!(tab[0] = ft_strsplit_tab(str[0], ';')))
 		return (-1);
 	return (0);
 }
@@ -38,15 +50,14 @@ int		main3(t_main *m, t_glob *g)
 		m->i++;
 	if (m->i)
 	{
-		if (!(m->tmp = ft_strsub(m->tab[m->j], m->i,
-			ft_strlen(m->tab[m->j]))))
+		if (!(m->tmp = ft_strsub(m->tab[m->j], m->i, ft_strlen(m->tab[m->j]))))
 			return (-1);
 		free(m->tab[m->j]);
 		m->tab[m->j] = m->tmp;
 	}
-	if ((m->tab[m->j][0] == '/' ||
-		ft_strncmp(m->tab[m->j], "./", 2) == 0) && ft_isdir(m->tab[m->j]))
+	if ((m->tab[m->j][0] == '/' || ft_strncmp(m->tab[m->j], "./", 2) == 0) && ft_isdir(m->tab[m->j]))
 	{
+		free(m->tmp);
 		m->tmp = ft_strjoin("cd ", m->tab[m->j]);
 		ft_cd(m->tmp, g);
 		free(m->tmp);
@@ -78,7 +89,8 @@ int		main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	if (setup_env(env, &g) == -1)
+	(void)env;
+	if (setup_env(&env, &g) == -1)
 		return (-1);
 	while (1)
 	{

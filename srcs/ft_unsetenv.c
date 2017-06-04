@@ -16,6 +16,7 @@ void	ft_unsetenv(char **test, char **tab, t_glob *g)
 {
 	int i;
 	int j;
+	char *tmp;
 
 	i = 0;
 	j = 0;
@@ -23,7 +24,8 @@ void	ft_unsetenv(char **test, char **tab, t_glob *g)
 	{
 		if (ft_strncmp(test[i], tab[1], ft_strlen(tab[1])) != 0)
 		{
-			g->env[j] = ft_strdup(test[i]);
+			tmp = ft_strdup(test[i]);
+			g->env[j] = tmp;
 			j++;
 		}
 		i++;

@@ -75,6 +75,16 @@ int		ft_dev1(char *str)
 		execve(str2, tab, NULL);
 		return (-1);
 	}
+
+	if (str[0] == '/')
+	{
+		tab = ft_strsplit(str, ' ');
+		execve(tab[0], tab, NULL);
+		ft_libre(tab);
+		return (-1);
+	}
+
+
 	return (0);
 }
 

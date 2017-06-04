@@ -43,6 +43,7 @@ typedef struct	s_main
 	char		**tab;
 }				t_main;
 
+char			**ft_strsplit_tab(char const *s, char c);
 void			ft_dev(char *str, pid_t id, t_glob *g);
 void			ft_libre(char **tab);
 char			**ft_strsplit2(char*s, char c);
@@ -60,6 +61,6 @@ int				ft_strlen_tab(char **tab);
 void			ft_libre(char **tab);
 int				isex(char *str);
 int				ft_no(char *str, t_glob *g);
-int				setup_env(char **env, t_glob *g);
+int				setup_env(char ***env, t_glob *g);
 
 #endif

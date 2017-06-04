@@ -22,9 +22,9 @@ static int		ft_cnt_parts(const char *s, char c)
 	cnt = 0;
 	while (*s != '\0')
 	{
-		if (in_substring == 1 && *s == c)
+		if (in_substring == 1 && (*s == c || *s == '\t'))
 			in_substring = 0;
-		if (in_substring == 0 && *s != c)
+		if (in_substring == 0 && (*s != c && *s != '\t'))
 		{
 			in_substring = 1;
 			cnt++;
@@ -39,7 +39,7 @@ static int		ft_wlen(const char *s, char c)
 	int		len;
 
 	len = 0;
-	while (*s != c && *s != '\0')
+	while ((*s != c && *s != '\t') && *s != '\0')
 	{
 		len++;
 		s++;
@@ -62,7 +62,7 @@ char			**ft_strsplit(char const *s, char c)
 		return (NULL);
 	while (nb_word--)
 	{
-		while (*s == c && *s != '\0')
+		while ((*s == c || *s == '\t') && *s != '\0')
 			s++;
 		t[index] = ft_strsub((const char *)s, 0, ft_wlen((const char *)s, c));
 		if (t[index] == NULL)

@@ -88,7 +88,7 @@ void	ft_set_env(char *str, t_glob *g)
 	i = -1;
 	ft_libre(g->env);
 	if (!(g->env = (char **)malloc(sizeof(char *) *
-		(ft_strlen_tab(test) + 1))))
+		(ft_strlen_tab(test) + 2))))
 		return ;
 	while (test[++i] != NULL)
 		g->env[i] = ft_strdup(test[i]);

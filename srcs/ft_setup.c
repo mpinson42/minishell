@@ -33,21 +33,22 @@ int		ft_no(char *str, t_glob *g)
 	return (0);
 }
 
-int		setup_env(char **env, t_glob *g)
+int		setup_env(char ***env, t_glob *g)
 {
 	int i;
 	int j;
 
 	i = 0;
 	j = 0;
-	if (!(g->env = (char **)malloc(sizeof(char *) * (ft_strlen_tab(env) + 1))))
+	if (!(g->env = (char **)malloc(sizeof(char *) * (ft_strlen_tab(env[0]) + 1))))
 		return (-1);
-	while (env[i])
+	while (env[0][i])
 	{
-		g->env[j] = ft_strdup(env[i]);
+		g->env[j] = ft_strdup(env[0][i]);
 		i++;
 		j++;
 	}
 	g->env[j] = NULL;
+	env = &g->env;
 	return (0);
 }
