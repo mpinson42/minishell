@@ -65,7 +65,7 @@ int		main3(t_main *m, t_glob *g)
 	return (0);
 }
 
-int		main4(t_main *m, t_glob *g)
+int		main4(t_main *m, t_glob *g, char **env)
 {
 	if (ft_check(g, m->tab[m->j]) == 1)
 	{
@@ -75,10 +75,23 @@ int		main4(t_main *m, t_glob *g)
 	m->id = fork();
 	if (ft_strncmp("echo", m->tab[m->j], 4) &&
 			ft_strncmp("cd", m->tab[m->j], 2))
-		ft_dev(m->tab[m->j], m->id, g);
+		ft_dev(m->tab[m->j], m->id, g, env);
 	if (m->id > 0)
 		wait(&m->id);
 	return (0);
+}
+
+int ft_null(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[++i])
+	{
+		if (str[i] != ' ')
+			return (0);
+	}
+	return (-1);
 }
 
 int		main(int argc, char **argv, char **env)
@@ -95,15 +108,17 @@ int		main(int argc, char **argv, char **env)
 		if (main2(&m.str, &m.tab) == -1)
 			continue ;
 		m.j = -1;
-		while (m.tab[++m.j])
+		while (m.tab[++m.j] != NULL)
 		{
+			if(ft_null(m.tab[m.j]) == -1)
+				continue ;
 			if (main3(&m, &g) == -1)
 				continue;
 			if (ft_no(m.tab[m.j], &g) == 1)
 				continue ;
 			if (ft_strncmp(m.tab[m.j], "exit", 4) == 0)
 				return (0);
-			if (main4(&m, &g) == -1)
+			if (main4(&m, &g, g.env) == -1)
 				continue ;
 		}
 		ft_libre(m.tab);

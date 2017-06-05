@@ -51,7 +51,7 @@ int		is_in(char *path, char *commande)
 	return (0);
 }
 
-int		ft_dev1(char *str)
+int		ft_dev1(char *str, char **env)
 {
 	int		i;
 	int		b;
@@ -72,15 +72,15 @@ int		ft_dev1(char *str)
 			b++;
 		}
 		str2[b] = '\0';
-		execve(str2, tab, NULL);
+		execve(str2, tab, env);
 		return (-1);
 	}
-	if (ft_slah(str) == -1)
+	if (ft_slah(str, env) == -1)
 		return (-1);
 	return (0);
 }
 
-int		ft_dev2(char *str, int j, char **tab2)
+int		ft_dev2(char *str, int j, char **tab2, char **env)
 {
 	char	**tab;
 	int		i;
@@ -101,13 +101,13 @@ int		ft_dev2(char *str, int j, char **tab2)
 			b++;
 		}
 		str2[b] = '\0';
-		execve(str2, tab, NULL);
+		execve(str2, tab, env);
 		return (-1);
 	}
 	return (0);
 }
 
-void	ft_dev(char *str, pid_t id, t_glob *g)
+void	ft_dev(char *str, pid_t id, t_glob *g, char **env)
 {
 	char	**tab2;
 	int		i;
@@ -115,7 +115,7 @@ void	ft_dev(char *str, pid_t id, t_glob *g)
 	i = 0;
 	if (id == 0)
 	{
-		if (ft_dev1(str) == -1)
+		if (ft_dev1(str, env) == -1)
 			return ;
 		while (g->env[i] && ft_strncmp(g->env[i], "PATH=", 5) != 0)
 			i++;
@@ -123,7 +123,7 @@ void	ft_dev(char *str, pid_t id, t_glob *g)
 		i = -1;
 		while (tab2[++i])
 		{
-			if (ft_dev2(str, i, tab2) == -1)
+			if (ft_dev2(str, i, tab2, env) == -1)
 				return ;
 		}
 	}

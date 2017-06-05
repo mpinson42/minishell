@@ -12,14 +12,14 @@
 
 #include "mini.h"
 
-int		ft_slah(char *str)
+int		ft_slah(char *str, char **env)
 {
 	char **tab;
 
 	if (str[0] == '/')
 	{
 		tab = ft_strsplit(str, ' ');
-		execve(tab[0], tab, NULL);
+		execve(tab[0], tab, env);
 		ft_libre(tab);
 		return (-1);
 	}

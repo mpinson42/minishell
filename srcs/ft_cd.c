@@ -104,6 +104,8 @@ int		ft_cd(char *str, t_glob *g)
 	if (ft_strncmp("cd", str, 2) == 0)
 	{
 		tab = ft_strsplit(str, ' ');
+		if(tab[1] && tab[1][0] == '~')
+			ft_cd_tild(&tab);
 		if (ft_chr(tab) == 1)
 			return (1);
 		ft_set_env("setenv HOME /Users/mpinson", g);
