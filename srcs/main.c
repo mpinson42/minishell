@@ -23,8 +23,8 @@ int		main2(char (*str)[5000], char ***tab)
 	i = -1;
 	while (str[0][++i])
 	{
-		if (str[0][i] == '\n')
-			str[0][i] = 0;
+		str[0][i] == '\t' ? str[0][i] = ' ' : 0;
+		str[0][i] == '\n' ? str[0][i] = '\0' : 0;
 		if ((str[0][i] == ' ') && i == (int)ft_strlen(str[0]) - 1)
 			return (-1);
 	}
