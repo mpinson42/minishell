@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "mini.h"
-pid_t		id;
+
 int		main2(char (*str)[5000], char ***tab)
 {
 	int i;
@@ -76,32 +76,19 @@ int		main4(t_main *m, t_glob *g, char **env)
 	if (ft_strncmp("echo", m->tab[m->j], 4) &&
 			ft_strncmp("cd", m->tab[m->j], 2))
 		ft_dev(m->tab[m->j], m->id, g, env);
-	id = m->id;
+	g_id = m->id;
 	if (m->id > 0)
 		wait(&m->id);
 	return (0);
 }
 
-int ft_null(char *str)
+void	gestion(int signial)
 {
-	int i;
-
-	i = 0;
-	while (str[++i])
-	{
-		if (str[i] != ' ')
-			return (0);
-	}
-	return (-1);
-}
-
-void gestion(int signial)
-{
-	if(signial == SIGINT)
+	if (signial == SIGINT)
 	{
 		ft_putstr("\n");
-		if(id == 0)
-		ft_pronpt();
+		if (g_id == 0)
+			ft_pronpt();
 	}
 }
 
@@ -117,16 +104,13 @@ int		main(int argc, char **argv, char **env)
 	signal(SIGINT, gestion);
 	while (1)
 	{
+		g_id = 0;
 		if (main2(&m.str, &m.tab) == -1)
 			continue ;
 		m.j = -1;
 		while (m.tab[++m.j] != NULL)
 		{
-			if(ft_null(m.tab[m.j]) == -1)
-				continue ;
-			if (main3(&m, &g) == -1)
-				continue;
-			if (ft_no(m.tab[m.j], &g) == 1)
+			if (ft_do_it(&m, &g) == -1)
 				continue ;
 			if (ft_strncmp(m.tab[m.j], "exit", 4) == 0)
 				return (0);

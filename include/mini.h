@@ -25,7 +25,7 @@
 # include <errno.h>
 # include <stdio.h>
 # include <sys/xattr.h>
-#include <signal.h>
+# include <signal.h>
 
 typedef struct	s_glob
 {
@@ -44,6 +44,10 @@ typedef struct	s_main
 	char		**tab;
 }				t_main;
 
+pid_t			g_id;
+int				ft_null(char *str);
+int				main3(t_main *m, t_glob *g);
+int				ft_do_it(t_main *m, t_glob *g);
 int				ft_slah(char *str, char **env);
 char			**ft_strsplit_tab(char const *s, char c);
 void			ft_dev(char *str, pid_t id, t_glob *g, char **env);

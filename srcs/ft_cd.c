@@ -6,7 +6,7 @@
 /*   By: mpinson <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/31 18:28:55 by mpinson           #+#    #+#             */
-/*   Updated: 2017/05/31 18:28:59 by mpinson          ###   ########.fr       */
+/*   Updated: 2017/06/08 15:45:22 by mpinson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int		ft_cd(char *str, t_glob *g)
 	if (ft_strncmp("cd", str, 2) == 0)
 	{
 		tab = ft_strsplit(str, ' ');
-		if(tab[1] && tab[1][0] == '~')
+		if (tab[1] && tab[1][0] == '~')
 			ft_cd_tild(&tab);
 		if (ft_chr(tab) == 1)
 			return (1);
