@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "mini.h"
-
+pid_t		id;
 int		main2(char (*str)[5000], char ***tab)
 {
 	int i;
@@ -76,6 +76,7 @@ int		main4(t_main *m, t_glob *g, char **env)
 	if (ft_strncmp("echo", m->tab[m->j], 4) &&
 			ft_strncmp("cd", m->tab[m->j], 2))
 		ft_dev(m->tab[m->j], m->id, g, env);
+	id = m->id;
 	if (m->id > 0)
 		wait(&m->id);
 	return (0);
@@ -94,6 +95,16 @@ int ft_null(char *str)
 	return (-1);
 }
 
+void gestion(int signial)
+{
+	if(signial == SIGINT)
+	{
+		ft_putstr("\n");
+		if(id == 0)
+		ft_pronpt();
+	}
+}
+
 int		main(int argc, char **argv, char **env)
 {
 	t_main m;
@@ -103,6 +114,7 @@ int		main(int argc, char **argv, char **env)
 	(void)argv;
 	if (setup_env(&env, &g) == -1)
 		return (-1);
+	signal(SIGINT, gestion);
 	while (1)
 	{
 		if (main2(&m.str, &m.tab) == -1)

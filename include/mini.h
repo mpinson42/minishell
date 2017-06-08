@@ -25,6 +25,7 @@
 # include <errno.h>
 # include <stdio.h>
 # include <sys/xattr.h>
+#include <signal.h>
 
 typedef struct	s_glob
 {
