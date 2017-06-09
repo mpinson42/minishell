@@ -20,6 +20,8 @@ int		main2(char (*str)[5000], char ***tab)
 	ft_pronpt();
 	if (read(0, str, 5000) == -1)
 		return (-1);
+	if (str[0][0] == '\0')
+		exit(0);
 	i = -1;
 	while (str[0][++i])
 	{
@@ -31,11 +33,7 @@ int		main2(char (*str)[5000], char ***tab)
 	i = ft_strlen(str[0]) - 1;
 	while (i >= 0 && (str[0][i] == ' ' || str[0][i] == '\t'
 				|| str[0][i] == '\n' || str[0][i] == 0))
-	{
-		str[0][i] = 0;
-		i--;
-	}
-	i = -1;
+		str[0][i--] = 0;
 	if (!(tab[0] = ft_strsplit(str[0], ';')))
 		return (-1);
 	return (0);
@@ -90,6 +88,8 @@ void	gestion(int signial)
 		if (g_id == 0)
 			ft_pronpt();
 	}
+	else
+		exit(0);
 }
 
 int		main(int argc, char **argv, char **env)
